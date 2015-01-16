@@ -34,16 +34,10 @@ Example
 
 
 ```python
-from docstash import Stash
+from barn import create
 
-# open a stash in the current working directory:
-stash = Stash(path='.stash')
-
-# print a list of collections:
-print list(stash)
-
-# access (or create) a specific collection:
-collection = stash.get('test')
+# open a collection of packages
+collection = create(path='/tmp')
 
 # import a file from the local working directory:
 collection.ingest('README.md')
@@ -66,8 +60,7 @@ The code for this library is very compact, go check it out.
 Configuration
 -------------
 
-The storage directory for the stash is an optional value. If it isn't passed in (or if it is ``None``), the value of the environment variable ``DOCSTASH_PATH`` will be used. If that variable is unused, docstash will default to ``~/.docstash``.
-
+TODO
 
 License
 -------
