@@ -9,6 +9,6 @@ install:
   - pip install coveralls
 script:
   - nosetests
-  - coverage run --source=yourpackagename setup.py test
+  - coverage run --source=barn setup.py test
 after_success:
   - coveralls
