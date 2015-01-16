@@ -20,6 +20,7 @@ setup(
     namespace_packages=[],
     include_package_data=True,
     zip_safe=False,
+    test_suite='nose.collector',
     install_requires=[
         "Werkzeug>=0.9.6",
         "lockfile>=0.9.1",
