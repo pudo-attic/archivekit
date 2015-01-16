@@ -39,6 +39,7 @@ setup(
         #]
     },
     tests_require=[
-        "moto>=0.3.9"
+        "moto>=0.3.9",
+        "nose>=1.3.0"
     ]
 )
