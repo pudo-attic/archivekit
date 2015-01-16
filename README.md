@@ -1,25 +1,26 @@
-docstash
-========
+barn
+====
 
 A simple mechanism for storing a (potentially large) set of immutable documents in an organized way. Metadata is stored along with the data as a YAML file.
 
-``docstash`` is inspired by [OFS](https://github.com/okfn/ofs), [BagIt](https://github.com/LibraryOfCongress/bagit-python) and [Pairtree](https://pythonhosted.org/Pairtree/).
+
+``docstash`` is inspired by [OFS](https://github.com/okfn/ofs), [BagIt](https://github.com/LibraryOfCongress/bagit-python) and [Pairtree](https://pythonhosted.org/Pairtree/). It replaces a previous project, [docstash](https://github.com/pudo/docstash).
 
 
 Installation
 ------------
 
-The easiest way of using ``docstash`` is via PyPI:
+The easiest way of using ``barn`` is via PyPI:
 
 ```bash
-$ pip install docstash
+$ pip install barn
 ```
 
 Alternatively, check out the repository from GitHub and install it locally:
 
 ```bash
-$ git clone https://github.com/pudo/docstash.git
-$ cd docstash
+$ git clone https://github.com/pudo/barn.git
+$ cd barn
 $ python setup.py develop
 ```
 
@@ -27,7 +28,8 @@ $ python setup.py develop
 Example
 -------
 
-``docstash`` manages ``Documents`` which are part of a ``Collection``, which in turn is part of a ``Stash``. The location of the main stash can be considered a per-user setting, it can be shared by applications using this library.
+``barn`` manages ``Packages`` which are part of a ``Collection``. 
+
 
 ```python
 from docstash import Stash
@@ -68,4 +70,4 @@ The storage directory for the stash is an optional value. If it isn't passed in 
 License
 -------
 
-``docstash`` is open source, licensed under a standard MIT license (included in this repository as ``LICENSE``).
+``barn`` is open source, licensed under a standard MIT license (included in this repository as ``LICENSE``).
