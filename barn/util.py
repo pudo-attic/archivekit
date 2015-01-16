@@ -25,7 +25,7 @@ def json_default(obj):
     if isinstance(obj, Decimal):
         obj = float(obj)
     if isinstance(obj, date):
-        return 'loadKitDate(%s)' % obj.isoformat()
+        return 'new Date(%s)' % obj.isoformat()
     return obj
 
 
@@ -33,7 +33,7 @@ def json_hook(obj):
     for k, v in obj.items():
         if isinstance(v, basestring):
             try:
-                obj[k] = datetime.strptime(v, "loadKitDate(%Y-%m-%d)").date()
+                obj[k] = datetime.strptime(v, "new Date(%Y-%m-%d)").date()
             except ValueError:
                 pass
             try:
