@@ -1,6 +1,8 @@
 barn
 ====
 
+[![Build Status](https://travis-ci.org/pudo/barn.png?branch=master)](https://travis-ci.org/pudo/barn)
+
 A simple mechanism for storing a (potentially large) set of immutable documents in an organized way. Metadata is stored along with the data as a YAML file.
 
 
