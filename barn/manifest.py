@@ -9,13 +9,16 @@ from barn.util import json_default, json_hook
 class Manifest(dict):
     """ A manifest has metadata on a package. """
 
-    def __init__(self, key):
-        self.key = key
-        self.reload()
+    def __init__(self, obj):
+        self.object = obj
+        self.load()
 
-    def reload(self):
-        if self.key.exists():
-            self.update(json.load(self.key, object_hook=json_hook))
+    def load(self):
+        if self.object.exists():
+            fh = self.object.load_fileobj()
+            self.update(json.load(fh, object_hook=json_hook))
+            if hasattr(fh, 'close'):
+                fh.close()
         else:
             self['created_at'] = datetime.utcnow()
             self.update({'resources': {}})
@@ -23,7 +26,7 @@ class Manifest(dict):
     def save(self):
         self['updated_at'] = datetime.utcnow()
         content = json.dumps(self, default=json_default, indent=2)
-        self.key.set_contents_from_string(content)
+        self.object.save_data(content)
 
     def __repr__(self):
         return '<Manifest(%r)>' % self.key

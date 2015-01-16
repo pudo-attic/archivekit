@@ -1,10 +1,8 @@
 import os
 from uuid import uuid4
 
-from barn.artifact import Artifact
-from barn.source import Source
-from barn.logfile import LogFile
 from barn.manifest import Manifest
+from barn.store.common import MANIFEST
 
 
 class Package(object):
@@ -12,51 +10,24 @@ class Package(object):
     source file, a manifest metadata file and one or many processed
     version. """
 
-    PREFIX = 'packages'
-    MANIFEST = 'manifest.json'
-
-    def __init__(self, bucket, id=None):
-        self.bucket = bucket
+    def __init__(self, store, id=None):
+        self.store = store
         self.id = id or uuid4().hex
-        self._keys = {}
-
-    def get_key(self, name):
-        if not self._keys.get(name):
-            key_name = os.path.join(self.PREFIX, self.id, name)
-            key = self.bucket.get_key(key_name)
-            if key is None:
-                key = self.bucket.new_key(key_name)
-            self._keys[name] = key
-        return self._keys[name]
 
     def has(self, cls, name):
-        name = os.path.join(self.PREFIX, self.id, cls.GROUP, name)
-        self._keys[name] = self.bucket.get_key(name)
-        return bool(self._keys[name])
+        return cls(self, name).exists()
 
-    def _iter_resources(self, cls, *extra):
-        prefix = os.path.join(self.PREFIX, self.id, cls.GROUP, *extra)
-        for key in self.bucket.get_all_keys(prefix=prefix):
-            cut = os.path.join(self.PREFIX, self.id, cls.GROUP)
-            name = key.name.replace(cut, '').strip('/')
-            yield cls(self, name)
-            
-    @property
-    def artifacts(self):
-        return self._iter_resources(Artifact)
-
-    @property
-    def sources(self):
-        return self._iter_resources(Source)
-
-    def logfiles(self, prefix):
-        return self._iter_resources(LogFile, prefix)
+    def all(self, cls, *extra):
+        prefix = os.path.join(cls.GROUP, *extra)
+        for path in self.store.list_resources(self.id):
+            if path.startswith(prefix):
+                yield cls.from_path(self, path)
 
     @property
     def manifest(self):
         if not hasattr(self, '_manifest'):
-            key = self.get_key(self.MANIFEST)
-            self._manifest = Manifest(key)
+            obj = self.store.get_object(self.id, MANIFEST)
+            self._manifest = Manifest(obj)
         return self._manifest
 
     def save(self):
