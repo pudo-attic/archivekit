@@ -24,7 +24,9 @@ setup(
         "Werkzeug>=0.9.6",
         "lockfile>=0.9.1",
         "python-slugify>=0.0.6",
-        "boto>=2.33"
+        "boto>=2.33",
+        "moto>=0.3.9",
+        "nose>=1.3.0"
     ],
     entry_points={
         'barn.stores': [
@@ -39,7 +41,5 @@ setup(
         #]
     },
     tests_require=[
-        "moto>=0.3.9",
-        "nose>=1.3.0"
     ]
 )
