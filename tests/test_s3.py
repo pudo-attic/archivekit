@@ -6,6 +6,14 @@ from barn.store.s3 import S3Store
 
 
 @mock_s3
+def test_store_loader():
+    from barn.ext import get_stores
+    stores = get_stores()
+    assert 's3' in stores, stores
+    assert stores['s3'] == S3Store, stores
+
+
+@mock_s3
 def test_basic_package():
     store = S3Store(bucket_name='test_bucket')
     coll = Collection(store)
@@ -38,5 +46,9 @@ def test_storing_a_file():
     store = S3Store(bucket_name='test_bucket')
     coll = Collection(store)
     pkg = coll.create()
+
+    from barn.ext import get_stores
+    print get_stores()
     
     # TODO: implement ingest.
+    assert False

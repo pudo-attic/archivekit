@@ -26,7 +26,18 @@ setup(
         "python-slugify>=0.0.6",
         "boto>=2.33"
     ],
-    entry_points={},
+    entry_points={
+        'barn.stores': [
+            's3 = barn.store.s3:S3Store',
+            'file = barn.store.file:FileStore'
+        ],
+        'barn.resource_types': [
+            'source = barn.types.source:Source'
+        ],
+        #'console_scripts': [
+        #    'barn = barn.cli:cli'
+        #]
+    },
     tests_require=[
         "moto>=0.3.9"
     ]
