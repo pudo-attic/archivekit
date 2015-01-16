@@ -12,13 +12,10 @@ class Resource(object):
     def __init__(self, package, name):
         self.package = package
         self.name = name
+        self.path = os.path.join(self.GROUP, name)
         self._obj = package.store.get_object(package.store, package.id,
                                              self.path)
         self.meta = ResourceMetaData(self)
-
-    @property
-    def path(self):
-        return os.path.join(self.GROUP, self.name)
 
     @classmethod
     def from_path(cls, package, path):

@@ -23,8 +23,11 @@ setup(
     install_requires=[
         "Werkzeug>=0.9.6",
         "lockfile>=0.9.1",
-        "python-slugify>=0.0.6"
+        "python-slugify>=0.0.6",
+        "boto>=2.33"
     ],
     entry_points={},
-    tests_require=[]
+    tests_require=[
+        "moto>=0.3.9"
+    ]
 )

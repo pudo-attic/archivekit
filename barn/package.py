@@ -23,6 +23,9 @@ class Package(object):
             if path.startswith(prefix):
                 yield cls.from_path(self, path)
 
+    def exists(self):
+        return self.store.get_object(self.id, MANIFEST).exists()
+
     @property
     def manifest(self):
         if not hasattr(self, '_manifest'):

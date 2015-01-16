@@ -8,8 +8,8 @@ from barn.store.common import Store, StoreObject, MANIFEST
 
 class S3Store(Store):
     
-    def __init_(self, aws_key_id=None, aws_secret=None, bucket_name=None,
-                prefix=None, location=Location.EU, **kwargs):
+    def __init__(self, aws_key_id=None, aws_secret=None, bucket_name=None,
+                 prefix=None, location=Location.EU, **kwargs):
         self.aws_key_id = aws_key_id
         self.aws_secret = aws_secret
         self.bucket_name = bucket_name
@@ -31,7 +31,7 @@ class S3Store(Store):
         return self._bucket
 
     def get_object(self, package_id, path):
-        raise S3StoreObject(self, package_id, path)
+        return S3StoreObject(self, package_id, path)
 
     def list_packages(self):
         for key in self.bucket.get_all_keys(prefix=self.prefix):
@@ -56,19 +56,21 @@ class S3StoreObject(StoreObject):
         self.package_id = package_id
         self.path = path
         self._key = None
-        self._key_name = os.path.join(store.prefix, package_id, path)
+        self._key_name = os.path.join(package_id, path)
+        if store.prefix:
+            self._key_name = os.path.join(store.prefix, self._key_name)
 
     @property
     def key(self):
         if self._key is None:
-            self._key = self.bucket.get_key(self._key_name)
+            self._key = self.store.bucket.get_key(self._key_name)
             if self._key is None:
-                self._key = self.bucket.new_key(self._key_name)
+                self._key = self.store.bucket.new_key(self._key_name)
         return self._key
 
     def exists(self):
         if self._key is None:
-            self._key = self.bucket.get_key(self._key_name)
+            self._key = self.store.bucket.get_key(self._key_name)
         return self._key is not None
 
     def save_fileobj(self, fileobj):
@@ -78,7 +80,7 @@ class S3StoreObject(StoreObject):
         self.key.set_contents_from_string(data)
 
     def load_fileobj(self):
-        return self.key.open_read()
+        return self.key
 
     def public_url(self):
         if not self.exists:
