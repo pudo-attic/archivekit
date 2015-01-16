@@ -6,3 +6,10 @@ def get_stores():
     for ep in iter_entry_points('barn.stores'):
         stores[ep.name] = ep.load()
     return stores
+
+
+def get_resource_types():
+    types = {}
+    for ep in iter_entry_points('barn.resource_types'):
+        types[ep.name] = ep.load()
+    return types

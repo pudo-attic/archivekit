@@ -14,6 +14,14 @@ def test_store_loader():
 
 
 @mock_s3
+def test_create():
+    from barn import create
+    coll = create('s3', bucket_name='foo')
+    assert isinstance(coll.store, S3Store), coll.store
+    assert coll.store.bucket.name == 'foo', coll.store.bucket
+
+
+@mock_s3
 def test_basic_package():
     store = S3Store(bucket_name='test_bucket')
     coll = Collection(store)
