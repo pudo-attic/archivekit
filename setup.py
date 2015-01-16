@@ -1,10 +1,9 @@
-import os
 from setuptools import setup, find_packages
 
 setup(
-    name='docstash',
-    version='0.2.2',
-    description="Store a set of documents and metadata in an organized way",
+    name='barn',
+    version='0.0.1',
+    description="Store a set of files and metadata in an organized way",
     long_description="",
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -22,9 +21,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "PyYAML>=3.11",
         "Werkzeug>=0.9.6",
-        "lockfile>=0.9.1"
+        "lockfile>=0.9.1",
+        "python-slugify>=0.0.6"
     ],
     entry_points={},
     tests_require=[]
