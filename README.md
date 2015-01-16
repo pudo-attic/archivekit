@@ -37,7 +37,11 @@ Example
 from barn import create
 
 # open a collection of packages
-collection = create(path='/tmp')
+collection = create('file', path='/tmp')
+
+# or via S3:
+collection = create('s3', aws_key_id='..', aws_secret='..',
+                    bucket_name='test.pudo.org')
 
 # import a file from the local working directory:
 collection.ingest('README.md')

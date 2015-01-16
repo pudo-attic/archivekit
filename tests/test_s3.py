@@ -55,8 +55,5 @@ def test_storing_a_file():
     coll = Collection(store)
     pkg = coll.create()
 
-    from barn.ext import get_stores
-    print get_stores()
-    
     # TODO: implement ingest.
-    assert False
+    #assert False
