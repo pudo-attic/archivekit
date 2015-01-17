@@ -76,6 +76,9 @@ class S3StoreObject(StoreObject):
     def save_fileobj(self, fileobj):
         self.key.send_file(fileobj)
 
+    def save_file(self, file_name, destructive=False):
+        self.key.set_contents_from_filename(file_name)
+
     def save_data(self, data):
         self.key.set_contents_from_string(data)
 

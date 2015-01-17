@@ -30,6 +30,12 @@ class StoreObject(object):
     def save_fileobj(self, fileobj):
         raise NotImplemented()
 
+    def save_file(self, file, destructive=False):
+        """ Update the contents of this resource from the given file
+        name. If ``destructive`` is set, the original file may be
+        lost (i.e. it will be moved, not copied). """
+        raise NotImplemented()
+
     def save_data(self, data):
         raise NotImplemented()
 

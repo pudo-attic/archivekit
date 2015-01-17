@@ -1,5 +1,5 @@
 import os
-from shutil import copyfileobj
+import shutil
 
 from barn.store.common import Store, StoreObject, MANIFEST
 from barn.util import safe_id, fullpath
@@ -65,7 +65,14 @@ class FileStoreObject(StoreObject):
     def save_fileobj(self, fileobj):
         self._prepare()
         with open(self._abs_path, 'wb') as fh:
-            copyfileobj(fileobj, fh)
+            shutil.copyfileobj(fileobj, fh)
+
+    def save_file(self, file_name, destructive=False):
+        self._prepare()
+        if destructive:
+            shutil.move(file_name, self._abs_path)
+        else:
+            shutil.copy(file_name, self._abs_path)
 
     def save_data(self, data):
         self._prepare()

@@ -1,4 +1,5 @@
 import os
+from hashlib import sha1
 from decimal import Decimal
 from slugify import slugify
 from datetime import datetime, date
@@ -8,8 +9,7 @@ def safe_id(name):
     """ Remove potential path escapes from a content ID. """
     if name is None:
         return None
-    name = os.path.basename(name).strip()
-    name = slugify(name).strip('-')
+    name = slugify(os.path.basename(name)).strip('-')
     name = name.ljust(5, '_')
     return name
 
@@ -26,6 +26,9 @@ def make_secure_filename(source):
 
 
 def fullpath(filename):
+    """ Perform normalization of the source file name. """
+    if filename is None:
+        return
     # a happy tour through stdlib
     filename = os.path.expanduser(filename)
     filename = os.path.expandvars(filename)
@@ -34,6 +37,8 @@ def fullpath(filename):
 
 
 def clean_headers(headers):
+    """ Convert HTTP response headers into a common format
+    for storing them in the resource meta data. """
     result = {}
     for k, v in dict(headers).items():
         k = k.lower().replace('-', '_')
@@ -41,9 +46,15 @@ def clean_headers(headers):
     return result
 
 
-def guess_extension(name):
-    _, ext = os.path.splitext(name or '')
-    return ext.replace('.', '').lower().strip()
+def checksum(filename):
+    hash = sha1()
+    with open(filename, 'rb') as fh:
+        while True:
+            block = fh.read(2 ** 10)
+            if not block:
+                break
+            hash.update(block)
+    return hash.hexdigest()
             
 
 def json_default(obj):

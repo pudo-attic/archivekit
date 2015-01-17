@@ -1,4 +1,6 @@
 from barn.package import Package
+from barn.ingest import Ingestor
+from barn.ext import get_resource_types
 
 
 class Collection(object):
@@ -7,6 +9,7 @@ class Collection(object):
 
     def __init__(self, store):
         self.store = store
+        self.resource_types = get_resource_types()
 
     def create(self, id=None, manifest=None):
         """ Create a package and save a manifest. If ``manifest`` is
@@ -20,6 +23,22 @@ class Collection(object):
     def get(self, id):
         """ Get a ``Package`` identified by the ``id``. """
         return Package(self.store, id=id)
+
+    def ingest(self, something, meta=None):
+        """ Import a given object into the collection. The object can be
+        either a URL, a file or folder name, an open file handle or a
+        HTTP returned object from urllib, urllib2 or requests.
+
+        Before importing it, a SHA1 hash will be generated and used as the
+        package ID. If a package with the given name already exists, it
+        will be overwritten. If you do not desire SHA1 de-duplication,
+        create a package directly and ingest from there. """
+        for ingestor in Ingestor.analyze(something):
+            try:
+                package = self.get(ingestor.hash())
+                package.ingest(ingestor, meta=meta)
+            finally:
+                ingestor.dispose()
 
     def __iter__(self):
         for package_id in self.store.list_packages():

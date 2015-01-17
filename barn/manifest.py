@@ -16,7 +16,6 @@ class Manifest(dict):
     def load(self):
         if self.object.exists():
             fh = self.object.load_fileobj()
-            print "FILE", fh
             self.update(json.load(fh, object_hook=json_hook))
             if hasattr(fh, 'close'):
                 fh.close()

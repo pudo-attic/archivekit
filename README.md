@@ -1,16 +1,13 @@
-barn
-====
+# barn
 
 [![Build Status](https://travis-ci.org/pudo/barn.png?branch=master)](https://travis-ci.org/pudo/barn) [![Coverage Status](https://coveralls.io/repos/pudo/barn/badge.svg)](https://coveralls.io/r/pudo/barn)
 
 A simple mechanism for storing a (potentially large) set of immutable documents in an organized way. Metadata is stored along with the data as a YAML file.
 
+``barn`` is inspired by [OFS](https://github.com/okfn/ofs), [BagIt](https://github.com/LibraryOfCongress/bagit-python) and [Pairtree](https://pythonhosted.org/Pairtree/). It replaces a previous project, [docstash](https://github.com/pudo/docstash).
 
-``docstash`` is inspired by [OFS](https://github.com/okfn/ofs), [BagIt](https://github.com/LibraryOfCongress/bagit-python) and [Pairtree](https://pythonhosted.org/Pairtree/). It replaces a previous project, [docstash](https://github.com/pudo/docstash).
 
-
-Installation
-------------
+## Installation
 
 The easiest way of using ``barn`` is via PyPI:
 
@@ -27,11 +24,9 @@ $ python setup.py develop
 ```
 
 
-Example
--------
+## Example
 
 ``barn`` manages ``Packages`` which are part of a ``Collection``. 
-
 
 ```python
 from barn import create
@@ -61,12 +56,11 @@ for doc in collection:
 The code for this library is very compact, go check it out.
 
 
-Configuration
--------------
+## Configuration
+
 
 TODO
 
-License
--------
+## License
 
 ``barn`` is open source, licensed under a standard MIT license (included in this repository as ``LICENSE``).
