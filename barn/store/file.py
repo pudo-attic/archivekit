@@ -1,8 +1,12 @@
 import os
 import shutil
+from threading import Lock
 
 from barn.store.common import Store, StoreObject, MANIFEST
 from barn.util import safe_id, fullpath
+
+# TODO: make this more granular
+lock = Lock() 
 
 
 class FileStore(Store):
@@ -63,26 +67,30 @@ class FileStoreObject(StoreObject):
             pass
 
     def save_fileobj(self, fileobj):
-        self._prepare()
-        with open(self._abs_path, 'wb') as fh:
-            shutil.copyfileobj(fileobj, fh)
+        with lock:
+            self._prepare()
+            with open(self._abs_path, 'wb') as fh:
+                shutil.copyfileobj(fileobj, fh)
 
     def save_file(self, file_name, destructive=False):
-        self._prepare()
-        if destructive:
-            shutil.move(file_name, self._abs_path)
-        else:
-            shutil.copy(file_name, self._abs_path)
+        with lock:
+            self._prepare()
+            if destructive:
+                shutil.move(file_name, self._abs_path)
+            else:
+                shutil.copy(file_name, self._abs_path)
 
     def save_data(self, data):
-        self._prepare()
-        with open(self._abs_path, 'wb') as fh:
-            fh.write(data)
+        with lock:
+            self._prepare()
+            with open(self._abs_path, 'wb') as fh:
+                fh.write(data)
 
     def load_fileobj(self):
-        if not self.exists():
-            raise ValueError('Object does not exist: %s' % self._abs_path)
-        return open(self._abs_path, 'rb')
+        with lock:
+            if not self.exists():
+                raise ValueError('Object does not exist: %s' % self._abs_path)
+            return open(self._abs_path, 'rb')
 
     def public_url(self):
         # TODO: optional argument to pass into store?
