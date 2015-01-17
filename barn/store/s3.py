@@ -35,12 +35,14 @@ class S3Store(Store):
 
     def list_packages(self):
         for key in self.bucket.get_all_keys(prefix=self.prefix):
-            _, id, part = key.name.split('/')
+            name = key.name[len(self.prefix):] if self.prefix else key.name
+            id, part = name.split('/', 1)
             if part == MANIFEST:
                 yield id
 
     def list_resources(self, package_id):
-        prefix = os.path.join(self.prefix, package_id)
+        prefix = os.path.join(self.prefix, package_id) \
+            if self.prefix else package_id
         skip = os.path.join(prefix, MANIFEST)
         offset = len(skip) - len(MANIFEST)
         for key in self.bucket.get_all_keys(prefix=prefix):
