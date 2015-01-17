@@ -29,7 +29,7 @@ $ python setup.py develop
 ``barn`` manages ``Packages`` which are part of a ``Collection``. 
 
 ```python
-from barn import create
+from barn import create, Source
 
 # open a collection of packages
 collection = create('file', path='/tmp')
@@ -47,10 +47,11 @@ collection.ingest('http://pudo.org/index.html')
 
 # iterate through each document and set a metadata
 # value:
-for doc in collection:
-    with open(doc.file, 'rb') as fh:
-        doc['body_length'] = len(fh.read())
-    doc.save()
+for package in collection:
+    for source in package.all(Source):
+        with source.fh() as fh:
+            source.meta['body_length'] = len(fh.read())
+    package.save()
 ```
 
 The code for this library is very compact, go check it out.
