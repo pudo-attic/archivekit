@@ -1,4 +1,5 @@
 from moto import mock_s3
+from StringIO import StringIO
 
 from helpers import DATA_FILE
 from barn import Collection
@@ -75,3 +76,17 @@ def test_package_ingest_file():
     assert source.meta.get('name') == 'test.csv', source.meta
     assert source.meta.get('extension') == 'csv', source.meta
     assert source.meta.get('slug') == 'test', source.meta
+
+
+@mock_s3
+def test_package_save_data():
+    store = S3Store(bucket_name='test_bucket')
+    coll = Collection(store)
+    pkg = coll.create()
+    src = Source(pkg, 'foo.csv')
+    src.save_data('huhu!')
+
+    src2 = Source(pkg, 'bar.csv')
+    sio = StringIO("bahfhkkjdf")
+    src2.save_fileobj(sio)
+

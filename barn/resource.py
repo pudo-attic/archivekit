@@ -27,6 +27,10 @@ class Resource(object):
     def exists(self):
         return self._obj.exists()
 
+    def save(self):
+        """ Save the metadata. """
+        return self.package.save()
+
     def save_data(self, data):
         """ Save a string to the given resource. Overwrites any existing
         data in the resource. """

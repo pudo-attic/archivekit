@@ -1,4 +1,5 @@
 import os
+from urllib2 import urlopen
 
 from boto.s3.connection import S3Connection, S3ResponseError
 from boto.s3.connection import Location
@@ -76,16 +77,18 @@ class S3StoreObject(StoreObject):
         return self._key is not None
 
     def save_fileobj(self, fileobj):
-        self.key.send_file(fileobj)
+        print self.key
+        self.key.set_contents_from_file(fileobj)
 
     def save_file(self, file_name, destructive=False):
-        self.key.set_contents_from_filename(file_name)
+        with open(file_name, 'rb') as fh:
+            self.save_fileobj(fh)
 
     def save_data(self, data):
         self.key.set_contents_from_string(data)
 
     def load_fileobj(self):
-        return self.key
+        return urlopen(self.public_url())
 
     def public_url(self):
         if not self.exists:
