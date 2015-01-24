@@ -4,6 +4,7 @@ from shutil import copyfileobj
 from httplib import HTTPResponse
 from StringIO import StringIO
 from urlparse import urlparse
+import mimetypes
 
 import requests
 
@@ -74,6 +75,13 @@ class Ingestor(object):
             meta['extension'] = ext
         if 'mime_type' not in meta and 'http_headers' in meta:
             meta['mime_type'] = meta.get('http_headers').get('content_type')
+            if not meta['extension']:
+                ext = mimetypes.guess_extension(meta['mime_type'])
+                if ext is not None:
+                    meta['extension'] = ext.strip('.')
+        elif 'mime_type' not in meta and meta['name']:
+            mime_type, encoding = mimetypes.guess_type(meta.get('name'))
+            meta['mime'] = mime_type
         return meta
 
     def store(self, source):
