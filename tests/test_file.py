@@ -68,6 +68,31 @@ def test_package_ingest_file():
     rmtree(path)
 
 
+def test_package_get_resource():
+    path = mkdtemp()
+    store = FileStore(path=path)
+    coll = Collection(store)
+    pkg = coll.create()
+    source = pkg.ingest(DATA_FILE)
+    other = pkg.get_resource(source.path)
+    assert isinstance(other, Source), other.__class__
+    assert other.path == source.path, other
+    rmtree(path)
+
+
+def test_package_source():
+    path = mkdtemp()
+    store = FileStore(path=path)
+    coll = Collection(store)
+    pkg = coll.create()
+    assert pkg.source is None, pkg.source
+    source = pkg.ingest(DATA_FILE)
+    other = pkg.source
+    assert isinstance(other, Source), other.__class__
+    assert other.path == source.path, other
+    rmtree(path)
+
+
 def test_package_ingest_url():
     path = mkdtemp()
     store = FileStore(path=path)

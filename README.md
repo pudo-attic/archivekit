@@ -29,14 +29,14 @@ $ python setup.py develop
 ``barn`` manages ``Packages`` which are part of a ``Collection``. 
 
 ```python
-from barn import create, Source
+from barn import open_collection, Source
 
 # open a collection of packages
-collection = create('file', path='/tmp')
+collection = open_collection('file', path='/tmp')
 
 # or via S3:
-collection = create('s3', aws_key_id='..', aws_secret='..',
-                    bucket_name='test.pudo.org')
+collection = open_collection('s3', aws_key_id='..', aws_secret='..',
+                             bucket_name='test.pudo.org')
 
 # import a file from the local working directory:
 collection.ingest('README.md')
@@ -59,8 +59,7 @@ The code for this library is very compact, go check it out.
 
 ## Configuration
 
-
-TODO
+If AWS credentials are not supplied for an S3-based collection, the application will attempt to use the ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY`` environment variables. ``AWS_BUCKET_NAME`` is also supported.
 
 ## License
 

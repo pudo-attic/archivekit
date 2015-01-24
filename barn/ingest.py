@@ -11,8 +11,8 @@ from barn.util import clean_headers, checksum, fullpath
 from barn.util import make_secure_filename
 
 
-def directory_files(path):
-    for (dir, _, files) in walk(path):
+def directory_files(fpath):
+    for (dir, _, files) in walk(fpath):
         for file_name in files:
             yield path.join(dir, file_name)
 

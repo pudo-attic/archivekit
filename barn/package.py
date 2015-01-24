@@ -3,6 +3,7 @@ from uuid import uuid4
 from itertools import count
 
 from barn.manifest import Manifest
+from barn.ext import get_resource_types
 from barn.ingest import Ingestor
 from barn.types.source import Source
 from barn.store.common import MANIFEST
@@ -39,9 +40,25 @@ class Package(object):
             self._manifest = Manifest(obj)
         return self._manifest
 
+    def get_resource(self, path):
+        """ Get a typed resource by it's path. """
+        for resource_type in get_resource_types().values():
+            prefix = os.path.join(resource_type.GROUP, '')
+            if path.startswith(prefix):
+                return resource_type.from_path(self, path)
+
     def save(self):
         """ Save the package metadata (manifest). """
         self.manifest.save()
+
+    @property
+    def source(self):
+        """ Return the sole source of this package if present, or
+        None if there is no source, or if there are multiple sources. """
+        sources = list(self.all(Source))
+        # TODO: should this raise for multiple sources instead?
+        if len(sources) == 1:
+            return sources[0]
 
     def ingest(self, something, meta=None, overwrite=True):
         """ Import a given object into the package as a source. The

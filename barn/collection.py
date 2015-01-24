@@ -1,6 +1,5 @@
 from barn.package import Package
 from barn.ingest import Ingestor
-from barn.ext import get_resource_types
 
 
 class Collection(object):
@@ -9,7 +8,6 @@ class Collection(object):
 
     def __init__(self, store):
         self.store = store
-        self.resource_types = get_resource_types()
 
     def create(self, id=None, manifest=None):
         """ Create a package and save a manifest. If ``manifest`` is

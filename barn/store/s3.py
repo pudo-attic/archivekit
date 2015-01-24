@@ -11,8 +11,13 @@ class S3Store(Store):
     
     def __init__(self, aws_key_id=None, aws_secret=None, bucket_name=None,
                  prefix=None, location=Location.EU, **kwargs):
+        if aws_key_id is None:
+            aws_key_id = os.environ.get('AWS_ACCESS_KEY_ID')
+            aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
         self.aws_key_id = aws_key_id
         self.aws_secret = aws_secret
+        if bucket_name is None:
+            bucket_name = os.environ.get('AWS_BUCKET_NAME')
         self.bucket_name = bucket_name
         self.prefix = prefix
         self.location = location

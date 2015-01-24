@@ -17,9 +17,9 @@ def test_store_loader():
 
 
 @mock_s3
-def test_create():
-    from barn import create
-    coll = create('s3', bucket_name='foo')
+def test_open_collection():
+    from barn import open_collection
+    coll = open_collection('s3', bucket_name='foo')
     assert isinstance(coll.store, S3Store), coll.store
     assert coll.store.bucket.name == 'foo', coll.store.bucket
 
