@@ -6,7 +6,7 @@ from barn.store.common import Store, StoreObject, MANIFEST
 from barn.util import safe_id, fullpath
 
 # TODO: make this more granular
-lock = Lock() 
+lock = Lock()
 
 
 class FileStore(Store):
@@ -92,8 +92,6 @@ class FileStoreObject(StoreObject):
                 raise ValueError('Object does not exist: %s' % self._abs_path)
             return open(self._abs_path, 'rb')
 
-    def public_url(self):
-        # TODO: optional argument to pass into store?
-        return None
-
+    def local_path(self):
+        return self._abs_path
 

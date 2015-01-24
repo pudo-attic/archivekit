@@ -80,6 +80,17 @@ def test_package_get_resource():
     rmtree(path)
 
 
+def test_resource_local():
+    path = mkdtemp()
+    store = FileStore(path=path)
+    coll = Collection(store)
+    pkg = coll.create()
+    source = pkg.ingest(DATA_FILE)
+    with source.local() as file_name:
+        assert file_name.endswith(source.name), file_name
+    rmtree(path)
+
+
 def test_package_source():
     path = mkdtemp()
     store = FileStore(path=path)

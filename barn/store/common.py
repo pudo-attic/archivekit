@@ -43,4 +43,7 @@ class StoreObject(object):
         raise NotImplemented()
 
     def public_url(self):
-        raise NotImplemented()
+        return None
+
+    def local_path(self):
+        return None

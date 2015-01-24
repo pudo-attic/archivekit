@@ -101,5 +101,3 @@ class S3StoreObject(StoreObject):
         # Welcome to the world of open data:
         self.key.make_public()
         return self.key.generate_url(expires_in=0, query_auth=False)
-
-

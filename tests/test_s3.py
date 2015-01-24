@@ -79,6 +79,17 @@ def test_package_ingest_file():
 
 
 @mock_s3
+def test_package_local_file():
+    store = S3Store(bucket_name='test_bucket')
+    coll = Collection(store)
+    pkg = coll.create()
+    source = pkg.ingest(DATA_FILE)
+    with source.local() as file_name:
+        assert file_name != DATA_FILE, file_name
+        assert file_name.endswith('test.csv'), file_name
+
+
+@mock_s3
 def test_package_save_data():
     store = S3Store(bucket_name='test_bucket')
     coll = Collection(store)

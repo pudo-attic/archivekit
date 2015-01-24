@@ -1,4 +1,7 @@
 import os
+import shutil
+import tempfile
+from contextlib import contextmanager
 
 from barn.manifest import ResourceMetaData
 
@@ -61,6 +64,22 @@ class Resource(object):
             except ValueError:
                 self._url = None
         return self._url
+
+    @contextmanager
+    def local(self):
+        """ This will make a local file version of a given resource
+        available for read analysis (e.g. for passing to external
+        programs). """
+        local_path = self._obj.local_path()
+        if local_path:
+            yield local_path
+        else:
+            path = tempfile.mkdtemp()
+            local_path = os.path.join(path, self.name)
+            with open(local_path, 'wb') as fh:
+                shutil.copyfileobj(self.fh(), fh)
+            yield local_path
+            shutil.rmtree(path)
 
     def __repr__(self):
         return '<Resource(%r)>' % self.path
