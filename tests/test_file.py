@@ -12,7 +12,7 @@ from barn.util import checksum
 def test_basic_package():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
 
     assert len(list(coll)) == 0, list(coll)
 
@@ -29,7 +29,7 @@ def test_basic_package():
 def test_basic_manifest():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     pkg.manifest['foo'] = 'bar'
     pkg.save()
@@ -44,7 +44,7 @@ def test_basic_manifest():
 def test_collection_ingest():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     coll.ingest(DATA_FILE)
     pkgs = list(coll)
     assert len(pkgs) == 1, pkgs
@@ -59,7 +59,7 @@ def test_collection_ingest():
 def test_package_ingest_file():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_FILE)
     assert source.meta.get('name') == 'test.csv', source.meta
@@ -71,7 +71,7 @@ def test_package_ingest_file():
 def test_package_get_resource():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_FILE)
     other = pkg.get_resource(source.path)
@@ -83,7 +83,7 @@ def test_package_get_resource():
 def test_resource_local():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_FILE)
     with source.local() as file_name:
@@ -94,7 +94,7 @@ def test_resource_local():
 def test_package_source():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     assert pkg.source is None, pkg.source
     source = pkg.ingest(DATA_FILE)
@@ -107,7 +107,7 @@ def test_package_source():
 def test_package_ingest_url():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_URL)
     assert source.name == 'barnet-2009.csv', source.name
@@ -122,7 +122,7 @@ def test_package_ingest_url():
 def test_package_ingest_fileobj():
     path = mkdtemp()
     store = FileStore(path=path)
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     with open(DATA_FILE, 'rb') as fh:
         source = pkg.ingest(fh)

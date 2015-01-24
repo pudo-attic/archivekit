@@ -5,7 +5,7 @@ from barn.types.source import Source # noqa
 from barn.ext import get_stores
 
 
-def open_collection(store_type, **kwargs):
+def open_collection(name, store_type, **kwargs):
     """ Create a ``barn.Collection`` of the given store type, passing
     along any arguments. The valid types at the moment are: s3, file.
     """
@@ -13,4 +13,4 @@ def open_collection(store_type, **kwargs):
     if store_cls is None:
         raise TypeError("No such store type: %s" % store_type)
     store = store_cls(**kwargs)
-    return Collection(store)
+    return Collection(name, store)

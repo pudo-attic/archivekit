@@ -6,16 +6,16 @@ class Store(object):
     """ A host object to represent a specific type of storage,
     in which objects are managed. """
 
-    def __init__(self, collection):
-        self.collection = collection
+    def __init__(self):
+        pass
 
-    def get_object(self, package_id, path):
+    def get_object(self, collection, package_id, path):
         raise NotImplemented()
 
-    def list_packages(self):
+    def list_packages(self, collection):
         raise NotImplemented()
 
-    def list_resources(self, package_id):
+    def list_resources(self, collection, package_id):
         raise NotImplemented()
 
 

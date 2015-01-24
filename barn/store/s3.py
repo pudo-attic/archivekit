@@ -36,19 +36,25 @@ class S3Store(Store):
                                                        location=self.location)
         return self._bucket
 
-    def get_object(self, package_id, path):
-        return S3StoreObject(self, package_id, path)
+    def get_object(self, collection, package_id, path):
+        return S3StoreObject(self, collection, package_id, path)
 
-    def list_packages(self):
-        for key in self.bucket.get_all_keys(prefix=self.prefix):
-            name = key.name[len(self.prefix):] if self.prefix else key.name
+    def _get_prefix(self, collection):
+        prefix = collection
+        if self.prefix:
+            prefix = os.path.join(self.prefix, prefix)
+        return prefix
+
+    def list_packages(self, collection):
+        prefix = self._get_prefix(collection)
+        for key in self.bucket.get_all_keys(prefix=prefix):
+            name = key.name[len(prefix) + 1:]
             id, part = name.split('/', 1)
             if part == MANIFEST:
                 yield id
 
-    def list_resources(self, package_id):
-        prefix = os.path.join(self.prefix, package_id) \
-            if self.prefix else package_id
+    def list_resources(self, collection, package_id):
+        prefix = os.path.join(self._get_prefix(collection), package_id)
         skip = os.path.join(prefix, MANIFEST)
         offset = len(skip) - len(MANIFEST)
         for key in self.bucket.get_all_keys(prefix=prefix):
@@ -59,12 +65,12 @@ class S3Store(Store):
 
 class S3StoreObject(StoreObject):
 
-    def __init__(self, store, package_id, path):
+    def __init__(self, store, collection, package_id, path):
         self.store = store
         self.package_id = package_id
         self.path = path
         self._key = None
-        self._key_name = os.path.join(package_id, path)
+        self._key_name = os.path.join(collection, package_id, path)
         if store.prefix:
             self._key_name = os.path.join(store.prefix, self._key_name)
 

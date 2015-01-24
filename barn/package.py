@@ -14,8 +14,9 @@ class Package(object):
     source file, a manifest metadata file and one or many processed
     version. """
 
-    def __init__(self, store, id=None):
+    def __init__(self, store, collection, id=None):
         self.store = store
+        self.collection = collection.name
         self.id = id or uuid4().hex
 
     def has(self, cls, name):
@@ -25,18 +26,19 @@ class Package(object):
     def all(self, cls, *extra):
         """ Iterate over all resources of a given type. """
         prefix = os.path.join(cls.GROUP, *extra)
-        for path in self.store.list_resources(self.id):
+        for path in self.store.list_resources(self.collection, self.id):
             if path.startswith(prefix):
                 yield cls.from_path(self, path)
 
     def exists(self):
         """ Check if the package identified by the given ID exists. """
-        return self.store.get_object(self.id, MANIFEST).exists()
+        obj = self.store.get_object(self.collection, self.id, MANIFEST)
+        return obj.exists()
 
     @property
     def manifest(self):
         if not hasattr(self, '_manifest'):
-            obj = self.store.get_object(self.id, MANIFEST)
+            obj = self.store.get_object(self.collection, self.id, MANIFEST)
             self._manifest = Manifest(obj)
         return self._manifest
 
@@ -93,4 +95,4 @@ class Package(object):
         return self.id == other.id
 
     def __repr__(self):
-        return '<Package(%r)>' % self.id
+        return '<Package(%r, %r)>' % (self.collection, self.id)

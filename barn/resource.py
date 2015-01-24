@@ -16,7 +16,8 @@ class Resource(object):
         self.package = package
         self.name = name
         self.path = os.path.join(self.GROUP, name)
-        self._obj = package.store.get_object(package.id, self.path)
+        self._obj = package.store.get_object(package.collection, package.id,
+                                             self.path)
         self.meta = ResourceMetaData(self)
 
     @classmethod

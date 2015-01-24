@@ -19,7 +19,7 @@ def test_store_loader():
 @mock_s3
 def test_open_collection():
     from barn import open_collection
-    coll = open_collection('s3', bucket_name='foo')
+    coll = open_collection('test', 's3', bucket_name='foo')
     assert isinstance(coll.store, S3Store), coll.store
     assert coll.store.bucket.name == 'foo', coll.store.bucket
 
@@ -27,7 +27,7 @@ def test_open_collection():
 @mock_s3
 def test_basic_package():
     store = S3Store(bucket_name='test_bucket')
-    coll = Collection(store)
+    coll = Collection('test', store)
 
     assert len(list(coll)) == 0, list(coll)
 
@@ -42,7 +42,7 @@ def test_basic_package():
 @mock_s3
 def test_basic_manifest():
     store = S3Store(bucket_name='test_bucket')
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     pkg.manifest['foo'] = 'bar'
     pkg.save()
@@ -55,7 +55,7 @@ def test_basic_manifest():
 @mock_s3
 def test_collection_ingest():
     store = S3Store(bucket_name='test_bucket')
-    coll = Collection(store)
+    coll = Collection('test', store)
     coll.ingest(DATA_FILE)
     pkgs = list(coll)
     assert len(pkgs) == 1, pkgs
@@ -70,7 +70,7 @@ def test_collection_ingest():
 @mock_s3
 def test_package_ingest_file():
     store = S3Store(bucket_name='test_bucket')
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_FILE)
     assert source.meta.get('name') == 'test.csv', source.meta
@@ -81,7 +81,7 @@ def test_package_ingest_file():
 @mock_s3
 def test_package_local_file():
     store = S3Store(bucket_name='test_bucket')
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_FILE)
     with source.local() as file_name:
@@ -92,7 +92,7 @@ def test_package_local_file():
 @mock_s3
 def test_package_save_data():
     store = S3Store(bucket_name='test_bucket')
-    coll = Collection(store)
+    coll = Collection('test', store)
     pkg = coll.create()
     src = Source(pkg, 'foo.csv')
     src.save_data('huhu!')

@@ -6,13 +6,14 @@ class Collection(object):
     """ The list of all packages with an existing manifest which exist in
     the given storage """
 
-    def __init__(self, store):
+    def __init__(self, name, store):
+        self.name = name
         self.store = store
 
     def create(self, id=None, manifest=None):
         """ Create a package and save a manifest. If ``manifest`` is
         given, the values are saved to the manifest. """
-        package = Package(self.store, id=id)
+        package = Package(self.store, self, id=id)
         if manifest is not None:
             package.manifest.update(manifest)
         package.save()
@@ -20,7 +21,7 @@ class Collection(object):
 
     def get(self, id):
         """ Get a ``Package`` identified by the ``id``. """
-        return Package(self.store, id=id)
+        return Package(self.store, self, id=id)
 
     def ingest(self, something, meta=None):
         """ Import a given object into the collection. The object can be
@@ -39,5 +40,8 @@ class Collection(object):
                 ingestor.dispose()
 
     def __iter__(self):
-        for package_id in self.store.list_packages():
-            yield Package(self.store, id=package_id)
+        for package_id in self.store.list_packages(self.name):
+            yield Package(self.store, self, id=package_id)
+
+    def __repr__(self):
+        return '<Collection(%r)>' % (self.name)
