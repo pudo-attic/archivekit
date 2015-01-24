@@ -25,6 +25,16 @@ def test_open_collection():
 
 
 @mock_s3
+def test_list_collections():
+    store = S3Store(bucket_name='foo', prefix='bar')
+    coll = Collection('test', store)
+    coll.ingest(DATA_FILE)
+    colls = list(store.list_collections())
+    assert len(colls) == 1, colls
+    assert colls[0] == coll.name, colls
+
+
+@mock_s3
 def test_basic_package():
     store = S3Store(bucket_name='test_bucket')
     coll = Collection('test', store)

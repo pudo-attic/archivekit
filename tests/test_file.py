@@ -3,7 +3,7 @@ from shutil import rmtree
 import urllib
 
 from helpers import DATA_FILE, DATA_URL
-from barn import Collection
+from barn import Collection, open_archive
 from barn.store.file import FileStore
 from barn.types.source import Source
 from barn.util import checksum
@@ -37,6 +37,20 @@ def test_basic_manifest():
     npkg = coll.get(pkg.id)
     assert npkg.id == pkg.id, npkg
     assert npkg.manifest['foo'] == 'bar', npkg.meta.items()
+
+    rmtree(path)
+
+
+def test_archive():
+    path = mkdtemp()
+    store = FileStore(path=path)
+    coll = Collection('test', store)
+    coll.ingest(DATA_FILE)
+
+    archive = open_archive('file', path=path)
+    assert archive.get('test') == coll, archive.get('test')
+    colls = list(archive)
+    assert len(colls) == 1, colls
 
     rmtree(path)
 

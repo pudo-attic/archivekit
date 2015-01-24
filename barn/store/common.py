@@ -12,6 +12,9 @@ class Store(object):
     def get_object(self, collection, package_id, path):
         raise NotImplemented()
 
+    def list_collections(self):
+        raise NotImplemented()
+
     def list_packages(self, collection):
         raise NotImplemented()
 

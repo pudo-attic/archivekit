@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='barn',
-    version='0.3.0',
+    version='0.4.0',
     description="Store a set of files and metadata in an organized way",
     long_description="",
     classifiers=[

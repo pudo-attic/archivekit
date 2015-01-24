@@ -19,6 +19,13 @@ class FileStore(Store):
     def get_object(self, collection, package_id, path):
         return FileStoreObject(self, collection, package_id, path)
 
+    def list_collections(self):
+        if self.path is None:
+            return
+        for collection in os.listdir(self.path):
+            if os.path.isdir(os.path.join(self.path, collection)):
+                yield collection
+
     def list_packages(self, collection):
         if self.path is None:
             return

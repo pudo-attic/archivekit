@@ -6,6 +6,8 @@ from boto.s3.connection import Location
 
 from barn.store.common import Store, StoreObject, MANIFEST
 
+DELIM = os.path.join(' ', ' ').strip()
+
 
 class S3Store(Store):
     
@@ -43,15 +45,17 @@ class S3Store(Store):
         prefix = collection
         if self.prefix:
             prefix = os.path.join(self.prefix, prefix)
-        return prefix
+        return os.path.join(prefix, '')
+
+    def list_collections(self):
+        prefix = os.path.join(self.prefix, '') if self.prefix else None
+        for prefix in self.bucket.list(prefix=prefix, delimiter=DELIM):
+            yield prefix.name.rsplit(DELIM, 2)[-2]
 
     def list_packages(self, collection):
         prefix = self._get_prefix(collection)
-        for key in self.bucket.get_all_keys(prefix=prefix):
-            name = key.name[len(prefix) + 1:]
-            id, part = name.split('/', 1)
-            if part == MANIFEST:
-                yield id
+        for sub_prefix in self.bucket.list(prefix=prefix, delimiter=DELIM):
+            yield sub_prefix.name.rsplit(DELIM, 2)[-2]
 
     def list_resources(self, collection, package_id):
         prefix = os.path.join(self._get_prefix(collection), package_id)
@@ -88,7 +92,6 @@ class S3StoreObject(StoreObject):
         return self._key is not None
 
     def save_fileobj(self, fileobj):
-        print self.key
         self.key.set_contents_from_file(fileobj)
 
     def save_file(self, file_name, destructive=False):
