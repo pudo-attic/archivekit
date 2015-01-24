@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='barn',
-    version='0.2.0',
+    version='0.3.0',
     description="Store a set of files and metadata in an organized way",
     long_description="",
     classifiers=[
@@ -11,7 +11,7 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
     ],
-    keywords='',
+    keywords='storage filesystem archive bagit bag etl data processing',
     author='Friedrich Lindenberg',
     author_email='friedrich@pudo.org',
     url='http://pudo.org',
