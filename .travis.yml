@@ -6,7 +6,7 @@ before_install:
   - source ./pyenv/bin/activate
 install:
   - python setup.py develop
-  - pip install coveralls
+  - pip install coveralls moto nose
 script:
   - nosetests
   - coverage run --source=barn setup.py test

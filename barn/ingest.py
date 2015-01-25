@@ -81,7 +81,7 @@ class Ingestor(object):
                     meta['extension'] = ext.strip('.')
         elif 'mime_type' not in meta and meta['name']:
             mime_type, encoding = mimetypes.guess_type(meta.get('name'))
-            meta['mime'] = mime_type
+            meta['mime_type'] = mime_type
         return meta
 
     def store(self, source):
