@@ -59,8 +59,9 @@ class Package(object):
         None if there is no source, or if there are multiple sources. """
         sources = list(self.all(Source))
         # TODO: should this raise for multiple sources instead?
-        if len(sources) == 1:
-            return sources[0]
+        if not len(sources):
+            return None
+        return sources[0]
 
     def ingest(self, something, meta=None, overwrite=True):
         """ Import a given object into the package as a source. The

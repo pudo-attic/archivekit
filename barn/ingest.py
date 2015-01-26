@@ -9,7 +9,7 @@ import mimetypes
 import requests
 
 from barn.util import clean_headers, checksum, fullpath
-from barn.util import make_secure_filename
+from barn.util import make_secure_filename, slugify
 
 
 def directory_files(fpath):
@@ -62,26 +62,28 @@ class Ingestor(object):
         if 'source_file' not in meta and self._file_name:
             meta['source_file'] = self._file_name
 
-        if 'name' not in meta or not meta.get('name'):
+        if not meta.get('name'):
             if meta.get('source_url') and len(meta.get('source_url')):
                 meta['name'] = meta['source_url']
             elif meta.get('source_file') and len(meta.get('source_file')):
                 meta['name'] = meta['source_file']
         name, slug, ext = make_secure_filename(meta.get('name'))
         meta['name'] = name
-        if 'slug' not in meta:
+        if not meta.get('slug'):
             meta['slug'] = slug
-        if 'extension' not in meta:
+        if not meta.get('extension'):
             meta['extension'] = ext
-        if 'mime_type' not in meta and 'http_headers' in meta:
+        if not meta.get('mime_type') and 'http_headers' in meta:
             meta['mime_type'] = meta.get('http_headers').get('content_type')
-            if not meta['extension']:
-                ext = mimetypes.guess_extension(meta['mime_type'])
-                if ext is not None:
-                    meta['extension'] = ext.strip('.')
-        elif 'mime_type' not in meta and meta['name']:
+            ext = mimetypes.guess_extension(meta['mime_type'])
+            if ext is not None:
+                meta['extension'] = ext.strip('.')
+        elif not meta.get('mime_type') and meta.get('name'):
             mime_type, encoding = mimetypes.guess_type(meta.get('name'))
             meta['mime_type'] = mime_type
+
+        if meta.get('extension'):
+            meta['extension'] = slugify(meta.get('extension'))
         return meta
 
     def store(self, source):
