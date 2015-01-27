@@ -15,10 +15,8 @@ class Manifest(dict):
 
     def load(self):
         if self.object.exists():
-            fh = self.object.load_fileobj()
-            self.update(json.load(fh, object_hook=json_hook))
-            if hasattr(fh, 'close'):
-                fh.close()
+            data = self.object.load_data()
+            self.update(json.loads(data, object_hook=json_hook))
         else:
             self['created_at'] = datetime.utcnow()
             self.update({'resources': {}})

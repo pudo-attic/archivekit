@@ -45,6 +45,9 @@ class StoreObject(object):
     def load_fileobj(self):
         raise NotImplemented()
 
+    def load_data(self):
+        raise NotImplemented()
+
     def public_url(self):
         return None
 

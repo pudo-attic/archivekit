@@ -1,12 +1,9 @@
 import os
 import shutil
-from threading import Lock
+from lockfile import LockFile
 
 from barn.store.common import Store, StoreObject, MANIFEST
 from barn.util import safe_id, fullpath
-
-# TODO: make this more granular
-lock = Lock()
 
 
 class FileStore(Store):
@@ -66,6 +63,7 @@ class FileStoreObject(StoreObject):
         pkg_path = self.store._make_path(collection, package_id)
         self._abs_path = os.path.join(pkg_path, path)
         self._abs_dir = os.path.dirname(self._abs_path)
+        self._lock = LockFile(self._abs_path)
 
     def exists(self):
         return os.path.exists(self._abs_path)
@@ -77,30 +75,37 @@ class FileStoreObject(StoreObject):
             pass
 
     def save_fileobj(self, fileobj):
-        with lock:
-            self._prepare()
+        self._prepare()
+        with self._lock:
             with open(self._abs_path, 'wb') as fh:
                 shutil.copyfileobj(fileobj, fh)
 
     def save_file(self, file_name, destructive=False):
-        with lock:
-            self._prepare()
+        self._prepare()
+        with self._lock:
             if destructive:
                 shutil.move(file_name, self._abs_path)
             else:
                 shutil.copy(file_name, self._abs_path)
 
     def save_data(self, data):
-        with lock:
-            self._prepare()
+        self._prepare()
+        with self._lock:
             with open(self._abs_path, 'wb') as fh:
                 fh.write(data)
 
     def load_fileobj(self):
-        with lock:
-            if not self.exists():
-                raise ValueError('Object does not exist: %s' % self._abs_path)
+        if not self.exists():
+            raise ValueError('Object does not exist: %s' % self._abs_path)
+        with self._lock:
             return open(self._abs_path, 'rb')
+
+    def load_data(self):
+        if not self.exists():
+            raise ValueError('Object does not exist: %s' % self._abs_path)
+        with self._lock:
+            with open(self._abs_path, 'rb') as fh:
+                return fh.read()
 
     def local_path(self):
         return self._abs_path

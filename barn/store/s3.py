@@ -104,6 +104,9 @@ class S3StoreObject(StoreObject):
     def load_fileobj(self):
         return urlopen(self.public_url())
 
+    def load_data(self):
+        return self.key.get_contents_as_string()
+
     def public_url(self):
         if not self.exists:
             raise ValueError('Object does not exist!')
