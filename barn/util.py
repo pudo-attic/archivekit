@@ -1,4 +1,5 @@
 import os
+import six
 from hashlib import sha1
 from decimal import Decimal
 from slugify import slugify
@@ -55,7 +56,16 @@ def checksum(filename):
                 break
             hash.update(block)
     return hash.hexdigest()
-            
+
+
+def encode_text(text):
+    if isinstance(text, six.text_type):
+        return text.encode('utf-8')
+    try:
+        return text.decode('utf-8').encode('utf-8')
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        return text.encode('ascii', 'replace')
+
 
 def json_default(obj):
     if isinstance(obj, datetime):

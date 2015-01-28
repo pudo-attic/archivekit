@@ -43,6 +43,12 @@ class Collection(object):
         for package_id in self.store.list_packages(self.name):
             yield Package(self.store, self, id=package_id)
 
+    def __contains__(self, name):
+        for collection in self:
+            if collection == name or collection.name == name:
+                return True
+        return False
+
     def __repr__(self):
         return '<Collection(%r)>' % (self.name)
 

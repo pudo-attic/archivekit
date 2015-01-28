@@ -26,7 +26,8 @@ setup(
         "lockfile>=0.9.1",
         "python-slugify>=0.0.6",
         "requests>=2.2.0",
-        "boto>=2.33"
+        "boto>=2.33",
+        "six"
     ],
     entry_points={
         'barn.stores': [
