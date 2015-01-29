@@ -112,7 +112,10 @@ class Ingestor(object):
             if url.scheme.lower() in ['http', 'https']:
                 something = requests.get(something)
             elif url.scheme.lower() in ['file', '']:
-                upath = fullpath(url.path)
+                finalpath = url.path
+                if osname == 'nt':
+                    finalpath = finalpath[1:]
+                upath = fullpath(finalpath)
                 if path.isdir(upath):
                     return (cls(file_name=f) for f in directory_files(upath))
                 return (cls(file_name=upath),)
