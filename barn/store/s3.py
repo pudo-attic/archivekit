@@ -109,10 +109,13 @@ class S3StoreObject(StoreObject):
         return self.key.get_contents_as_string()
 
     def _is_public(self):
-        for grant in self.key.get_acl().acl.grants:
-            if grant.permission == 'READ':
-                if grant.uri == ALL_USERS:
-                    return True
+        try:
+            for grant in self.key.get_acl().acl.grants:
+                if grant.permission == 'READ':
+                    if grant.uri == ALL_USERS:
+                        return True
+        except:
+            pass
         return False
 
     def public_url(self):
