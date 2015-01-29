@@ -55,6 +55,10 @@ class Resource(object):
         """ Read the contents of this resource as a file handle. """
         return self._obj.load_fileobj()
 
+    def data(self):
+        """ Read the contents of this resource as a string. """
+        return self._obj.load_data()
+
     @property
     def url(self):
         """ Return the public URL of the resource, if it exists. If

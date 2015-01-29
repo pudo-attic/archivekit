@@ -7,6 +7,7 @@ from boto.s3.connection import Location
 from barn.store.common import Store, StoreObject, MANIFEST
 
 DELIM = os.path.join(' ', ' ').strip()
+ALL_USERS = 'http://acs.amazonaws.com/groups/global/AllUsers'
 
 
 class S3Store(Store):
@@ -107,9 +108,17 @@ class S3StoreObject(StoreObject):
     def load_data(self):
         return self.key.get_contents_as_string()
 
+    def _is_public(self):
+        for grant in self.key.get_acl().acl.grants:
+            if grant.permission == 'READ':
+                if grant.uri == ALL_USERS:
+                    return True
+        return False
+
     def public_url(self):
-        if not self.exists:
-            raise ValueError('Object does not exist!')
+        if not self.exists():
+            return
         # Welcome to the world of open data:
-        self.key.make_public()
+        if not self._is_public():
+            self.key.make_public()
         return self.key.generate_url(expires_in=0, query_auth=False)

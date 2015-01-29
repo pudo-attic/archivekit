@@ -96,13 +96,13 @@ class FileStoreObject(StoreObject):
 
     def load_fileobj(self):
         if not self.exists():
-            raise ValueError('Object does not exist: %s' % self._abs_path)
+            return
         with self._lock:
             return open(self._abs_path, 'rb')
 
     def load_data(self):
         if not self.exists():
-            raise ValueError('Object does not exist: %s' % self._abs_path)
+            return
         with self._lock:
             with open(self._abs_path, 'rb') as fh:
                 return fh.read()
