@@ -1,4 +1,5 @@
 from os import path, walk, unlink
+from os import name as osname
 from tempfile import NamedTemporaryFile
 from shutil import copyfileobj
 from httplib import HTTPResponse
