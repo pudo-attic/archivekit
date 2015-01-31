@@ -6,12 +6,12 @@ from slugify import slugify
 from datetime import datetime, date
 
 
-def safe_id(name):
+def safe_id(name, len=5):
     """ Remove potential path escapes from a content ID. """
     if name is None:
         return None
     name = slugify(os.path.basename(name)).strip('-')
-    name = name.ljust(5, '_')
+    name = name.ljust(len, '_')
     return name
 
 

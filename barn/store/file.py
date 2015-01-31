@@ -5,6 +5,8 @@ from lockfile import LockFile
 from barn.store.common import Store, StoreObject, MANIFEST
 from barn.util import safe_id, fullpath
 
+LENGTH = 2
+
 
 class FileStore(Store):
     
@@ -37,8 +39,8 @@ class FileStore(Store):
                 yield id
 
     def _make_path(self, collection, package_id):
-        id = safe_id(package_id)
-        path = os.path.join(self.path, collection, *id[:5])
+        id = safe_id(package_id, len=LENGTH)
+        path = os.path.join(self.path, collection, *id[:LENGTH])
         return os.path.join(path, id)
 
     def list_resources(self, collection, package_id):
