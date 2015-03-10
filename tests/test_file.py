@@ -124,11 +124,11 @@ def test_package_ingest_url():
     coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_URL)
-    assert source.name == 'archivekitet-2009.csv', source.name
+    assert source.name == 'barnet-2009.csv', source.name
     assert source.meta['source_url'] == DATA_URL, source.meta
 
     source = pkg.ingest(urllib.urlopen(DATA_URL))
-    assert source.name == 'archivekitet-2009.csv', source.name
+    assert source.name == 'barnet-2009.csv', source.name
     assert source.meta['source_url'] == DATA_URL, source.meta
     rmtree(path)
 
