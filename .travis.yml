@@ -9,6 +9,6 @@ install:
   - pip install coveralls moto nose
 script:
   - nosetests
-  - coverage run --source=barn setup.py test
+  - coverage run --source=archivekit setup.py test
 after_success:
   - coveralls

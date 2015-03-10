@@ -2,15 +2,15 @@ from moto import mock_s3
 from StringIO import StringIO
 
 from helpers import DATA_FILE
-from barn import Collection
-from barn.store.s3 import S3Store
-from barn.types.source import Source
-from barn.util import checksum
+from archivekit import Collection
+from archivekit.store.s3 import S3Store
+from archivekit.types.source import Source
+from archivekit.util import checksum
 
 
 @mock_s3
 def test_store_loader():
-    from barn.ext import get_stores
+    from archivekit.ext import get_stores
     stores = get_stores()
     assert 's3' in stores, stores
     assert stores['s3'] == S3Store, stores
@@ -18,7 +18,7 @@ def test_store_loader():
 
 @mock_s3
 def test_open_collection():
-    from barn import open_collection
+    from archivekit import open_collection
     coll = open_collection('test', 's3', bucket_name='foo')
     assert isinstance(coll.store, S3Store), coll.store
     assert coll.store.bucket.name == 'foo', coll.store.bucket

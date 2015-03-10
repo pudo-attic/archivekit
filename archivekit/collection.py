@@ -1,5 +1,5 @@
-from barn.package import Package
-from barn.ingest import Ingestor
+from archivekit.package import Package
+from archivekit.ingest import Ingestor
 
 
 class Collection(object):

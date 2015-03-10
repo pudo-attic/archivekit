@@ -1,4 +1,4 @@
-from barn.collection import Collection
+from archivekit.collection import Collection
 
 
 class Archive(object):

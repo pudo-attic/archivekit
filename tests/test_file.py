@@ -3,10 +3,10 @@ from shutil import rmtree
 import urllib
 
 from helpers import DATA_FILE, DATA_URL
-from barn import Collection, open_archive
-from barn.store.file import FileStore
-from barn.types.source import Source
-from barn.util import checksum
+from archivekit import Collection, open_archive
+from archivekit.store.file import FileStore
+from archivekit.types.source import Source
+from archivekit.util import checksum
 
 
 def test_basic_package():
@@ -124,11 +124,11 @@ def test_package_ingest_url():
     coll = Collection('test', store)
     pkg = coll.create()
     source = pkg.ingest(DATA_URL)
-    assert source.name == 'barnet-2009.csv', source.name
+    assert source.name == 'archivekitet-2009.csv', source.name
     assert source.meta['source_url'] == DATA_URL, source.meta
 
     source = pkg.ingest(urllib.urlopen(DATA_URL))
-    assert source.name == 'barnet-2009.csv', source.name
+    assert source.name == 'archivekitet-2009.csv', source.name
     assert source.meta['source_url'] == DATA_URL, source.meta
     rmtree(path)
 

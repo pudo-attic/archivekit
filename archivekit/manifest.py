@@ -3,7 +3,7 @@ import collections
 from datetime import datetime
 
 
-from barn.util import json_default, json_hook
+from archivekit.util import json_default, json_hook
 
 
 class Manifest(dict):

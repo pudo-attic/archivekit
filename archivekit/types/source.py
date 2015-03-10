@@ -1,8 +1,8 @@
-from barn.resource import Resource
+from archivekit.resource import Resource
 
 
 class Source(Resource):
-    """ A source file, as initially submitted to the ``barn``. """
+    """ A source file, as initially submitted to the ``archivekit``. """
 
     GROUP = 'source'
 

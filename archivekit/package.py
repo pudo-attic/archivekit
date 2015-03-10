@@ -2,11 +2,11 @@ import os
 from uuid import uuid4
 from itertools import count
 
-from barn.manifest import Manifest
-from barn.ext import get_resource_types
-from barn.ingest import Ingestor
-from barn.types.source import Source
-from barn.store.common import MANIFEST
+from archivekit.manifest import Manifest
+from archivekit.ext import get_resource_types
+from archivekit.ingest import Ingestor
+from archivekit.types.source import Source
+from archivekit.store.common import MANIFEST
 
 
 class Package(object):

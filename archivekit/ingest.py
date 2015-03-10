@@ -9,8 +9,8 @@ import mimetypes
 
 import requests
 
-from barn.util import clean_headers, checksum, fullpath
-from barn.util import make_secure_filename, slugify
+from archivekit.util import clean_headers, checksum, fullpath
+from archivekit.util import make_secure_filename, slugify
 
 
 def directory_files(fpath):

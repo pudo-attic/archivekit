@@ -3,7 +3,7 @@ import shutil
 import tempfile
 from contextlib import contextmanager
 
-from barn.manifest import ResourceMetaData
+from archivekit.manifest import ResourceMetaData
 
 
 class Resource(object):

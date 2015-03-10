@@ -2,8 +2,8 @@ import os
 import shutil
 from lockfile import LockFile
 
-from barn.store.common import Store, StoreObject, MANIFEST
-from barn.util import safe_id, fullpath
+from archivekit.store.common import Store, StoreObject, MANIFEST
+from archivekit.util import safe_id, fullpath
 
 LENGTH = 2
 

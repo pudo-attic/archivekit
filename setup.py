@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='barn',
-    version='0.4.0',
+    name='archivekit',
+    version='0.5.0',
     description="Store a set of files and metadata in an organized way",
     long_description="",
     classifiers=[
@@ -30,17 +30,13 @@ setup(
         "six"
     ],
     entry_points={
-        'barn.stores': [
-            's3 = barn.store.s3:S3Store',
-            'file = barn.store.file:FileStore'
+        'archivekit.stores': [
+            's3 = archivekit.store.s3:S3Store',
+            'file = archivekit.store.file:FileStore'
         ],
-        'barn.resource_types': [
-            'source = barn.types.source:Source'
+        'archivekit.resource_types': [
+            'source = archivekit.types.source:Source'
         ],
-        #'console_scripts': [
-        #    'barn = barn.cli:cli'
-        #]
     },
-    tests_require=[
-    ]
+    tests_require=[]
 )
