@@ -43,9 +43,9 @@ class Collection(object):
         for package_id in self.store.list_packages(self.name):
             yield Package(self.store, self, id=package_id)
 
-    def __contains__(self, name):
-        for collection in self:
-            if collection == name or collection.name == name:
+    def __contains__(self, id):
+        for package in self:
+            if package == id or package.id == id:
                 return True
         return False
 
@@ -53,4 +53,6 @@ class Collection(object):
         return '<Collection(%r)>' % (self.name)
 
     def __eq__(self, other):
+        if not hasattr(other, 'name'):
+            return False
         return self.name == other.name
