@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='archivekit',
-    version='0.5.0',
+    version='0.5.1',
     description="Store a set of files and metadata in an organized way",
     long_description="",
     classifiers=[
