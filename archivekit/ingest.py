@@ -65,7 +65,12 @@ class Ingestor(object):
 
         if not meta.get('name'):
             if meta.get('source_url') and len(meta.get('source_url')):
-                meta['name'] = meta['source_url']
+                path = meta['source_url']
+                try:
+                    path = urlparse(path).path
+                except:
+                    pass
+                meta['name'] = path
             elif meta.get('source_file') and len(meta.get('source_file')):
                 meta['name'] = meta['source_file']
         name, slug, ext = make_secure_filename(meta.get('name'))
