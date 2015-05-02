@@ -70,11 +70,11 @@ class Package(object):
         requests. If ``overwrite`` is ``False``, the source file
         will be renamed until the name is not taken. """
         ingestors = list(Ingestor.analyze(something))
-        
+
         if len(ingestors) != 1:
             raise ValueError("Can't ingest: %r" % something)
         ingestor = ingestors[0]
-        
+
         try:
             meta = ingestor.generate_meta(meta)
             name = None

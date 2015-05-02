@@ -80,10 +80,12 @@ class Ingestor(object):
         if not meta.get('extension'):
             meta['extension'] = ext
         if not meta.get('mime_type') and 'http_headers' in meta:
-            meta['mime_type'] = meta.get('http_headers').get('content_type')
-            ext = mimetypes.guess_extension(meta['mime_type'])
-            if ext is not None:
-                meta['extension'] = ext.strip('.')
+            mime_type = meta.get('http_headers').get('content_type')
+            if mime_type not in ['application/octet-stream', 'text/plain']:
+                meta['mime_type'] = mime_type
+                ext = mimetypes.guess_extension(mime_type)
+                if ext is not None:
+                    meta['extension'] = ext.strip('.')
         elif not meta.get('mime_type') and meta.get('name'):
             mime_type, encoding = mimetypes.guess_type(meta.get('name'))
             meta['mime_type'] = mime_type
@@ -125,7 +127,7 @@ class Ingestor(object):
                 if path.isdir(upath):
                     return (cls(file_name=f) for f in directory_files(upath))
                 return (cls(file_name=upath),)
-        
+
         # Python requests
         if isinstance(something, requests.Response):
             fd = StringIO(something.content)
@@ -134,7 +136,7 @@ class Ingestor(object):
                 'http_headers': clean_headers(something.headers),
                 'source_url': something.url
             }), )
-    
+
         if isinstance(something, HTTPResponse):
             # Can't tell the URL for HTTPResponses
             return (cls(file_obj=something, meta={

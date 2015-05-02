@@ -9,7 +9,7 @@ LENGTH = 2
 
 
 class FileStore(Store):
-    
+
     def __init__(self, path=None, **kwargs):
         self.path = fullpath(path)
         if os.path.exists(path) and not os.path.isdir(path):
@@ -54,6 +54,12 @@ class FileStore(Store):
                 if path == skip:
                     continue
                 yield os.path.relpath(path, start=prefix)
+
+    def __repr__(self):
+        return '<FileStore(%r)>' % self.path
+
+    def __unicode__(self):
+        return self.path
 
 
 class FileStoreObject(StoreObject):
@@ -112,3 +118,8 @@ class FileStoreObject(StoreObject):
     def local_path(self):
         return self._abs_path
 
+    def __repr__(self):
+        return '<FileStore(%r)>' % self._abs_path
+
+    def __unicode__(self):
+        return self._abs_path

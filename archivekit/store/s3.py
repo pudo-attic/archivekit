@@ -67,6 +67,12 @@ class S3Store(Store):
                 continue
             yield key.name[offset:]
 
+    def __repr__(self):
+        return '<S3Store(%r, %r)>' % (self.bucket_name, self.prefix)
+
+    def __unicode__(self):
+        return os.path.join(self.bucket_name, self.prefix)
+
 
 class S3StoreObject(StoreObject):
 
@@ -124,4 +130,13 @@ class S3StoreObject(StoreObject):
         # Welcome to the world of open data:
         if not self._is_public():
             self.key.make_public()
-        return self.key.generate_url(expires_in=0, query_auth=False)
+        return self.key.generate_url(expires_in=0,
+                                     force_http=True,
+                                     query_auth=False)
+
+    def __repr__(self):
+        return '<S3StoreObject(%r, %r, %r)>' % (self.store, self.package_id,
+                                                self.path)
+
+    def __unicode__(self):
+        return self.public_url()
